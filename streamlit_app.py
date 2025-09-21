@@ -40,6 +40,11 @@ if audio:
         st.session_state.audio_content = None
     
     if button:
+        # 새로운 번역 시작 시 이전 세션 데이터 클리어
+        st.session_state.transcript_text = ""
+        st.session_state.translated_text = ""
+        st.session_state.audio_content = None
+        
         transcript = client.audio.transcriptions.create(
             model="whisper-1",
             file=audio,
