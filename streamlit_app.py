@@ -33,8 +33,10 @@ if audio:
         )
         b64_audio = base64.b64encode(answer.content).decode()
 
+        # 오디오 플레이어 추가 (처음 한번 자동재생, 이후 수동 재생 가능)
         st.html(f"""
-                <audio autoplay style="display:none">
+                <audio controls autoplay>
                     <source src="data:audio/mpeg;base64,{b64_audio}" type="audio/mp3">
+                    Your browser does not support the audio element.
                 </audio>
         """)
