@@ -75,3 +75,15 @@ if audio:
                 file_name=f"japanese_audio_{timestamp}.mp3",
                 mime="audio/mp3"
             )
+
+        crosscheckbutton = st.button("Cross-check Translation")
+        if crosscheckbutton:
+            translation_response = client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[
+            {"role": "system", "content": "You are a professional translator. Translate the following text to Korean. Only respond with the translation, no additional text."},
+            {"role": "user", "content": translated_text}
+            ],
+        )
+            crosscheck_text = translation_response.choices[0].message.content
+            st.chat_message("ai").write(f"Korean Translation: {crosscheck_text}")
