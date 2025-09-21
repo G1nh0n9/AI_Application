@@ -1,9 +1,32 @@
 import base64
 import streamlit as st
 from openai import OpenAI
+import datetime
 
 client = OpenAI()
+
+# 관리 패널 (사이드바)
+with st.sidebar:
+    st.header("🎧 Audio Management Panel")
+    enable_audio_save = st.checkbox("Enable Audio Download", value=False)
+    
+    if enable_audio_save:
+        st.info("📁 Audio download enabled")
+        st.caption("Download buttons will appear next to audio elements")
+
+# 음성 입력
+st.header("🎤 Voice Input")
 audio = st.audio_input("Record your voice:")
+
+# 입력 오디오 다운로드 버튼
+if audio and enable_audio_save:
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    st.download_button(
+        label="📥 Download Input Audio",
+        data=audio.getvalue(),
+        file_name=f"input_audio_{timestamp}.wav",
+        mime="audio/wav"
+    )
 
 if audio:
     button = st.button("Send a Message")
@@ -26,6 +49,8 @@ if audio:
         translated_text = translation_response.choices[0].message.content
         st.chat_message("ai").write(f"Japanese Translation: {translated_text}")
 
+        # 일본어 음성 생성
+        st.header("🔊 Japanese Audio Output")
         answer = client.audio.speech.create(
             model="tts-1",
             voice="nova",
@@ -40,3 +65,13 @@ if audio:
                     Your browser does not support the audio element.
                 </audio>
         """)
+        
+        # 출력 오디오 다운로드 버튼
+        if enable_audio_save:
+            timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+            st.download_button(
+                label="📥 Download Japanese Audio (MP3)",
+                data=answer.content,
+                file_name=f"japanese_audio_{timestamp}.mp3",
+                mime="audio/mp3"
+            )
