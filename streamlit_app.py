@@ -31,7 +31,7 @@ if audio:
             voice="nova",
             input=translated_text,
         )
-        b64_audio = base64.b64encode(answer.audio).decode()
+        b64_audio = base64.b64encode(answer.content).decode()
 
         st.html(f"""
                 <audio autoplay style="display:none">
