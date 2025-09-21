@@ -102,12 +102,12 @@ if audio:
 
         crosscheckbutton = st.button("Cross-check Translation")
         if crosscheckbutton and st.session_state.translated_text:
-            translation_response = client.chat.completions.create(
+            translation2_response = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
             {"role": "system", "content": "You are a professional translator. Translate the following text to Korean. Only respond with the translation, no additional text."},
             {"role": "user", "content": st.session_state.translated_text}
             ],
         )
-            crosscheck_text = translation_response.choices[0].message.content
+            crosscheck_text = translation2_response.choices[0].message.content
             st.chat_message("ai").write(f"Korean Translation: {crosscheck_text}")
